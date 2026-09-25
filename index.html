@@ -3,181 +3,658 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>A-Live Memories</title>
+  <title>A-Live Memories: Reflective Match-3 Life Journal</title>
+  <meta
+    name="description"
+    content="A-Live Memories is a reflective match-3 app for quiet moments, personal story choices, memory cards, and gentle self-reflection on iPhone."
+  />
+  <link rel="canonical" href="https://ginawu-dev.github.io/a-live-memories/" />
+  <meta property="og:title" content="A-Live Memories: Reflective Match-3 Life Journal" />
+  <meta
+    property="og:description"
+    content="A-Live Memories is a reflective match-3 app for quiet moments, personal story choices, memory cards, and gentle self-reflection on iPhone."
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://ginawu-dev.github.io/a-live-memories/" />
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "A-Live Memories",
+      "applicationCategory": "GameApplication",
+      "operatingSystem": "iOS 17.0 or later",
+      "description": "A-Live Memories is a reflective match-3 app for quiet moments, personal story choices, memory cards, and gentle self-reflection on iPhone.",
+      "applicationUrl": "https://apps.apple.com/ng/app/a-live-memories/id6799626929",
+      "url": "https://ginawu-dev.github.io/a-live-memories/"
+    }
+  </script>
 
   <style>
     :root {
-      --background: #111318;
-      --panel: #20232b;
-      --text: #f5f3ef;
-      --muted: #b8b7bd;
-      --accent: #69b7ff;
+      --bg: #f4efe8;
+      --bg-strong: #e9e0d3;
+      --panel: rgba(255, 255, 255, 0.7);
+      --panel-strong: #fffaf4;
+      --ink: #1e2430;
+      --muted: #5f6774;
+      --accent: #7d6a63;
+      --accent-strong: #4f5d76;
+      --gold: #d5b377;
+      --line: rgba(30, 36, 48, 0.1);
+      --shadow: 0 18px 50px rgba(98, 83, 68, 0.12);
+      --radius: 26px;
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
       background:
-        linear-gradient(rgba(17, 19, 24, 0.82), rgba(17, 19, 24, 0.96)),
-        url("background.jpg") center / cover fixed;
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        radial-gradient(circle at top, rgba(213, 179, 119, 0.18), transparent 26%),
+        linear-gradient(180deg, var(--bg) 0%, #f8f4ef 100%);
+      color: var(--ink);
       line-height: 1.6;
     }
 
-    header {
-      padding: 70px 24px 45px;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0 0 10px;
-      font-size: 42px;
-      letter-spacing: 0.02em;
-    }
-
-    header p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 18px;
-    }
-
-    main {
-      width: min(900px, calc(100% - 32px));
-      margin: 0 auto 60px;
-    }
-
-    section {
-      margin-bottom: 20px;
-      padding: 28px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 18px;
-      background: rgba(32, 35, 43, 0.94);
-    }
-
-    h2 {
-      margin-top: 0;
-      color: var(--accent);
-      font-size: 24px;
-    }
-
-    h3 {
-      margin-bottom: 6px;
-      font-size: 18px;
-    }
-
-    p {
-      color: var(--muted);
+    img {
+      max-width: 100%;
+      display: block;
     }
 
     a {
+      color: inherit;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+      background: rgba(244, 239, 232, 0.8);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 72px;
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .brand {
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .brand span {
       color: var(--accent);
     }
 
-    .button {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 12px 20px;
-      border-radius: 999px;
-      background: var(--accent);
-      color: #07111c;
-      font-weight: 700;
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: var(--muted);
       text-decoration: none;
+      font-size: 0.96rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 0 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-1px);
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(79, 93, 118, 0.18);
+    }
+
+    .button.secondary {
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--ink);
+    }
+
+    main {
+      padding-bottom: 64px;
+    }
+
+    .hero {
+      padding: 72px 0 24px;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1.25fr 0.9fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-strong);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 4vw, 4.3rem);
+      line-height: 1.06;
+      letter-spacing: -0.05em;
+    }
+
+    .hero-copy p {
+      margin: 18px 0 0;
+      color: var(--muted);
+      max-width: 620px;
+      font-size: 1.1rem;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .meta-list {
+      margin: 24px 0 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .meta-list li {
+      background: rgba(255, 255, 255, 0.52);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 12px;
+    }
+
+    .hero-panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.82));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .scene {
+      background: linear-gradient(180deg, #dfe6ec 0%, #b9c7d2 28%, #7d6a63 100%);
+      border-radius: 22px;
+      padding: 14px;
+      min-height: 440px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scene::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.2), transparent 28%),
+        linear-gradient(0deg, rgba(28, 33, 41, 0.28), rgba(28, 33, 41, 0.1));
+    }
+
+    .scene-card {
+      position: relative;
+      z-index: 1;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.28);
+      border-radius: 16px;
+      padding: 12px 14px;
+      color: #fff;
+      backdrop-filter: blur(4px);
+      margin-top: 16px;
+      max-width: 250px;
+    }
+
+    .scene-card strong {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.9;
+      margin-bottom: 6px;
+    }
+
+    .scene-card p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .scene-badge {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      z-index: 1;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 999px;
+      color: #fff;
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      backdrop-filter: blur(4px);
+    }
+
+    .section {
+      padding-top: 32px;
+    }
+
+    .section-heading {
+      margin-bottom: 20px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(2rem, 3vw, 2.7rem);
+      line-height: 1.12;
+      letter-spacing: -0.04em;
+    }
+
+    .section-heading p {
+      margin: 0 0 8px;
+      color: var(--accent-strong);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.74rem;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .feature-card,
+    .info-card,
+    .faq-item {
+      background: rgba(255,255,255,0.7);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px 20px;
+      box-shadow: 0 12px 30px rgba(71, 56, 43, 0.04);
+    }
+
+    .feature-card h3,
+    .info-card h3,
+    .faq-item h3 {
+      margin: 0 0 10px;
+      font-size: 1.18rem;
+    }
+
+    .feature-card p,
+    .info-card p,
+    .faq-item p,
+    .faq-item li,
+    .support-card p,
+    .support-card a,
+    .who-card p,
+    .who-card li {
+      color: var(--muted);
+    }
+
+    .story-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .story-copy,
+    .support-card,
+    .who-card {
+      background: rgba(255,255,255,0.7);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 26px 24px;
+    }
+
+    .story-copy p {
+      color: var(--muted);
+      margin: 0 0 16px;
+    }
+
+    .story-copy p:last-child {
+      margin-bottom: 0;
+    }
+
+    .check-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .check-list li + li {
+      margin-top: 10px;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .faq-item h3 {
+      margin-top: 0;
+      font-size: 1.1rem;
+    }
+
+    .faq-item p {
+      margin: 0;
+    }
+
+    .support-card {
+      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .support-card a {
+      text-decoration: none;
+      font-weight: 700;
+      color: var(--accent-strong);
+    }
+
+    .privacy-link {
+      display: inline-block;
+      margin-top: 16px;
+      color: var(--accent-strong);
+      text-decoration: none;
+      font-weight: 600;
     }
 
     footer {
-      padding: 25px;
-      text-align: center;
+      padding: 18px 0 42px;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .hero-inner,
+      .story-layout,
+      .feature-grid,
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .topbar-inner {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .topbar-inner {
+        min-height: 64px;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .cta-row {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .scene {
+        min-height: 350px;
+      }
+
+      .story-copy,
+      .support-card,
+      .who-card,
+      .feature-card,
+      .faq-item {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
     }
   </style>
 </head>
-
 <body>
-  <header>
-    <h1>A-Live</h1>
-    <p>A quiet place for play, memory, and reflection.</p>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/" aria-label="A-Live Memories home">A-Live <span>Memories</span></a>
+      <nav aria-label="Main navigation">
+        <a href="#features">Features</a>
+        <a href="#faq">FAQ</a>
+        <a href="#support">Support</a>
+        <a href="privacy.html">Privacy</a>
+      </nav>
+      <a class="button primary" href="https://apps.apple.com/ng/app/a-live-memories/id6799626929" target="_blank" rel="noopener noreferrer">Download on the App Store</a>
+    </div>
   </header>
 
   <main>
-    <section>
-      <h2>Support</h2>
-      <p>
-        Need help with A-Live? Contact us and we’ll do our best to help.
-      </p>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Reflective match-3 for quiet moments</p>
+          <h1>A-Live Memories: a reflective match-3 app for quiet moments</h1>
+          <p>
+            Step into a rainy rooftop world of gentle puzzles, personal story moments, and memory cards that grow over time. A-Live Memories is designed for slow, thoughtful play before sleep or during a quiet break in the day.
+          </p>
+          <div class="cta-row">
+            <a class="button primary" href="https://apps.apple.com/ng/app/a-live-memories/id6799626929" target="_blank" rel="noopener noreferrer">Download on the App Store</a>
+            <a class="button secondary" href="privacy.html">Privacy Policy</a>
+          </div>
+          <ul class="meta-list" aria-label="App details">
+            <li>iPhone app</li>
+            <li>Requires iOS 17.0+</li>
+            <li>Free with in-app purchases</li>
+          </ul>
+        </div>
 
-      <!-- Replace this email address with your real support email. -->
-      <a class="button" href="mailto:ginawuwriter@outlook.com">
-        Contact Support
-      </a>
+        <div class="hero-panel" aria-label="A-Live Memories illustrative scene">
+          <div class="scene">
+            <div class="scene-badge">Rainy rooftop</div>
+            <div class="scene-card">
+              <strong>Memory</strong>
+              <p>Choose a moment that feels true and keep it in your personal collection.</p>
+            </div>
+            <div class="scene-card" style="margin-left:auto; margin-top:180px;">
+              <strong>Reflection</strong>
+              <p>Slow down, listen to the soundscape, and revisit the scenes you noticed.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section>
-      <h2>Frequently Asked Questions</h2>
+    <section id="features" class="section">
+      <div class="container">
+        <div class="section-heading">
+          <p>What you can do</p>
+          <h2>Capture meaningful moments in a calm, reflective way</h2>
+        </div>
 
-      <h3>How do I save a memory image?</h3>
-      <p>
-        Open a collected memory, choose the background or card icon, and
-        confirm that you want to save the image to Photos.
-      </p>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <h3>Relax with gentle match-3 puzzles</h3>
+            <p>Play at your own pace with a cozy rhythm designed for winding down and slowing your thoughts.</p>
+          </article>
 
-      <h3>How do I control the background music?</h3>
-      <p>
-        Use the speaker icon on the game screen to turn music on or off.
-        You can adjust the volume from Settings.
-      </p>
+          <article class="feature-card">
+            <h3>Choose story moments</h3>
+            <p>Interactive story scenes invite you to notice details and make personal choices that feel meaningful to you.</p>
+          </article>
 
-      <h3>How do I reset the match board?</h3>
-      <p>
-        Open Settings and choose “Reset Match Board.” Your score and streak
-        will return to zero, while your collected memories remain.
-      </p>
+          <article class="feature-card">
+            <h3>Collect memory cards</h3>
+            <p>Build a personal collection of beautifully illustrated memory cards and revisit the scenes you discovered.</p>
+          </article>
 
-      <h3>How do I unlock Premium?</h3>
-      <p>
-        Open Settings and choose “Unlock Premium.” Premium allows you to
-        continue beyond the first ten memories and unlocks The Story of Your
-        Collection.
-      </p>
-
-      <h3>How do I restore my Premium purchase?</h3>
-      <p>
-        Open Settings, choose “Unlock Premium,” then tap “Restore Purchases.”
-        Make sure you are signed in with the Apple Account used for the
-        original purchase.
-      </p>
+          <article class="feature-card">
+            <h3>Save scenes to Photos</h3>
+            <p>Keep atmospheric backgrounds and cards in your Photos library when you choose to save them.</p>
+          </article>
+        </div>
+      </div>
     </section>
 
-    <section>
-      <h2>Privacy</h2>
-      <p>
-        A-Live only saves images to your Photos library when you explicitly
-        choose to save them. Your collection and game progress are stored
-        locally on your device.
-      </p>
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <p>A gentle routine</p>
+          <h2>Slow down, notice what matters, and keep your collection growing</h2>
+        </div>
 
-      <!-- Replace privacy-policy.html with your actual privacy policy page. -->
-      <a href="privacy-policy.html">Read our Privacy Policy</a>
+        <div class="story-layout">
+          <div class="story-copy">
+            <p>
+              As you progress, your choices become part of a personal collection. Each reflected moment builds a warmer picture of the themes, rhythms, and emotional patterns that stood out to you.
+            </p>
+            <p>
+              A-Live Memories is made for thoughtful play: a few quiet minutes before bed, a restful break in the middle of the day, or a gentle reset when you want to ease your mind.
+            </p>
+          </div>
+
+          <aside class="who-card">
+            <h3>Included in the experience</h3>
+            <ul class="check-list">
+              <li>Original atmospheric background music</li>
+              <li>Interactive story moments and personal choices</li>
+              <li>Memory cards and scene collection</li>
+              <li>Streak tracking and continued play</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
     </section>
 
-    <section>
-      <h2>App Information</h2>
-      <p>
-        A-Live is a reflective match-3 journey about noticing, choosing, and
-        remembering.
-      </p>
-      <p>
-        Version: 1.0
-      </p>
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <p>Who it’s for</p>
+          <h2>A calm app for people who enjoy reflection, memory, and gentle routines</h2>
+        </div>
+
+        <div class="story-layout">
+          <div class="info-card">
+            <h3>For quiet, reflective play</h3>
+            <p>A-Live Memories is a good fit for users who appreciate calming puzzle games, personal story moments, and a slower-paced way to collect meaningful memories.</p>
+          </div>
+
+          <div class="info-card">
+            <h3>For a mindful bedtime ritual</h3>
+            <p>The app is built around soft music, atmospheric imagery, and thoughtful interaction—particularly suitable for end-of-day relaxation.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="section">
+      <div class="container">
+        <div class="section-heading">
+          <p>FAQ</p>
+          <h2>Common questions</h2>
+        </div>
+
+        <div class="faq-grid">
+          <article class="faq-item">
+            <h3>Is A-Live Memories a journal app?</h3>
+            <p>It is designed as a reflective, story-led experience with memory cards, personal choices, and a collection that grows over time.</p>
+          </article>
+
+          <article class="faq-item">
+            <h3>Can I save photos and notes about moments?</h3>
+            <p>The app lets you save atmospheric backgrounds and cards to your Photos library when you choose to do so.</p>
+          </article>
+
+          <article class="faq-item">
+            <h3>Does the app include a life calendar or yearly memories view?</h3>
+            <p>Publicly verified App Store details do not describe a dedicated life calendar or yearly timeline feature.</p>
+          </article>
+
+          <article class="faq-item">
+            <h3>Is it a private app?</h3>
+            <p>Apple’s App Store privacy disclosure states that the developer does not collect data from this app. The public repo does not include app source code, so any broader privacy claim should be read conservatively.</p>
+          </article>
+
+          <article class="faq-item">
+            <h3>Can I listen to ambient music while I play?</h3>
+            <p>Yes. The App Store description highlights original background music and a rainy-night rooftop soundscape.</p>
+          </article>
+
+          <article class="faq-item">
+            <h3>Does it offer premium features?</h3>
+            <p>Yes. The App Store listing says the app offers in-app purchases, and premium continues play beyond the first ten memories and unlocks “The Story of Your Collection.”</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="support" class="section">
+      <div class="container">
+        <div class="support-card">
+          <div>
+            <p class="eyebrow" style="margin-bottom: 10px;">Support</p>
+            <h2 style="margin:0; font-size: clamp(1.8rem, 2.8vw, 2.4rem);">Need help with A-Live Memories?</h2>
+          </div>
+          <a href="mailto:ginawuwriter@outlook.com">ginawuwriter@outlook.com</a>
+        </div>
+        <a class="privacy-link" href="privacy.html">Read the Privacy Policy</a>
+      </div>
     </section>
   </main>
 
   <footer>
-    © 2026 A-Live. All rights reserved.
+    © 2026 A-Live Memories. All rights reserved.
   </footer>
 </body>
 </html>
